@@ -41,6 +41,7 @@ class Downloader(threading.Thread):
         handle = urllib2.urlopen(url)
         fname = os.path.join(outpath, os.path.basename(url))
         print >> sys.stderr, url, "downloading"
+        print >> sys.stderr, fname, "creating"
         with open(fname, "wb") as f:
             while True:
                 chunk = handle.read(1024)
@@ -99,9 +100,13 @@ def get_pdf_file_link(link):
 
 
 def main():
+    start = int(sys.argv[1])
+    end = int(sys.argv[2])
     pdfs = []
-    year_links = get_years_page(2013, 2013)
+    year_links = get_years_page(start, end)
+    print "total issues: ", len(year_links)  
     for yl in year_links:
+        print yl
         pdfs_date =  find_all_pdfs(yl)
         pdfs.extend(pdfs_date)
     download_all(pdfs)
